@@ -27,8 +27,9 @@ def pwn():
         pass
 
 def rep():
-    reping()
-    sleep(1200000)
+    while True:
+        reping()
+        sleep(1200000)
 
 def throod():
     boi = int(input("Give number of threads: "))
