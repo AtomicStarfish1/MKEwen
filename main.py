@@ -5,6 +5,7 @@ from threading import Thread
 from queryboi import que
 from repinger import reping
 from time import sleep
+from namey import namey
 
 def pwn():
     while True:
@@ -35,6 +36,11 @@ def querer():
         que()
         sleep(1200000)
 
+def namer():
+    while True:
+        namey()
+        sleep(1200000)
+
 def throod():
     boi = int(input("Give number of threads: "))
     threads = []
@@ -43,7 +49,10 @@ def throod():
         threads.start()
     repper = Thread(target=rep)
     quererer = Thread(target=querer)
+    namerer = Thread(target=namer)
     repper.start()
     quererer.start()
+    namerer.start()
+    
 
 throod()
