@@ -18,3 +18,6 @@ def que():
             #print('Query failed on %s' % bruh)
             fs.write('%s|failed query\n' % bruh)
     fs.close()
+
+if __name__ == "__main__":
+    que()
