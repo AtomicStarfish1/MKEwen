@@ -1,3 +1,0 @@
-import queryboi
-
-queryboi.que()
