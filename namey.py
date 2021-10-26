@@ -15,3 +15,6 @@ def namey():
     for name in bruh:
         fs.write(name)
     fs.close()
+
+if __name__ == "__main__":
+    namey()
