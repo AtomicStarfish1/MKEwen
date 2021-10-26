@@ -17,7 +17,6 @@ def pwn():
             print("%s has %s players and replied in %s ms" % (gen,status.players.online,status.latency))
             fs.write("%s|%s|%s\n" % (gen,status.players.online,status.latency))
             fs.close()
-            que()
         except ConnectionRefusedError and OSError:
             pass
             #print("Server didn't respond :(")
@@ -31,6 +30,11 @@ def rep():
         reping()
         sleep(1200000)
 
+def querer():
+    while True:
+        que()
+        sleep(1200000)
+
 def throod():
     boi = int(input("Give number of threads: "))
     threads = []
@@ -38,6 +42,8 @@ def throod():
         threads = Thread(target=pwn)
         threads.start()
     repper = Thread(target=rep)
+    quererer = Thread(target=querer)
     repper.start()
+    quererer.start()
 
 throod()
