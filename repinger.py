@@ -23,3 +23,6 @@ def reping():
             #print("Server didn't respond :(")
             fs.write("%s|DOWN\n" % (bruh))
     fs.close()
+
+if __name__ == "__main__":
+    reping()
