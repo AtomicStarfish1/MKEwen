@@ -1,6 +1,6 @@
 from mcstatus import MinecraftServer
 
-def que():
+def que(pipeline):
     f = open('out.txt', 'r+')
     lines = f.readlines()
     f.close()
