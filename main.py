@@ -1,3 +1,4 @@
+from os import pipe
 from ipgen import *
 import concurrent.futures
 from mcstatus import MinecraftServer
@@ -9,37 +10,32 @@ from namey import namey
 import queue
 
 def pwn(id, pipeline):
+    #looks for minecraft servers
     while True:
-        gen = ipgen() + ':25565'
-        server = MinecraftServer.lookup(gen)
-        fs = open("out.txt", "a")
+        ip = ipgen() + ':25565'
+        server = MinecraftServer.lookup(ip)
         try:
             status = server.status()
-            print("%s has %s players and replied in %s ms" % (gen,status.players.online,status.latency))
-            fs.write("%s|%s|%s\n" % (gen,status.players.online,status.latency))
-            fs.close()
+            print("%s has %s players and replied in %s ms" % (ip,status.players.online,status.latency))
+            pipeline.put([ip,status.players.online,status.latency])
         except ConnectionRefusedError and OSError:
             pass
-            print(f"Thread {id}: Server {gen} didn't respond :(")
-    try:
-        fs.close()
-    except:
-        pass
+            print(f"Thread {id}: Server {ip} didn't respond :(")
 
 def rep(pipeline):
     while True:
         reping(pipeline)
-        sleep(12)
+        sleep(1)
 
 def querer(pipeline):
     while True:
         que(pipeline)
-        sleep(12)
+        sleep(1)
 
 def namer(pipeline):
     while True:
         namey(pipeline)
-        sleep(12)
+        sleep(1)
     
 def BetterThreader(workers):
     pipeline = queue.Queue(maxsize=1000)
@@ -53,4 +49,4 @@ def BetterThreader(workers):
                 ii = str(i)+' '
             exicutor.submit(pwn, ii, pipeline); print(f'Starting Thread {i}: "pwn"')
     
-BetterThreader(1000)
+BetterThreader(400)

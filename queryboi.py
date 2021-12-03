@@ -1,21 +1,19 @@
 from mcstatus import MinecraftServer
 
 def que(pipeline):
-    f = open('out.txt', 'r+')
-    lines = f.readlines()
-    f.close()
-    fs = open('qout.txt', 'w').close()
+    # Gets extra details on minecraft servers
+    # Will create a "server profile" in the future
     fs = open('qout.txt', 'a')
-    for line in lines:
-        bruh = line.split('|')[0]
-        #print(bruh)
+    while pipeline.not_empty:
+        bruh = pipeline.get()[0]
+        print(bruh)
         server = MinecraftServer.lookup(bruh)
         try:
             query = server.query()
-            #print('%s queried!' % bruh)
+            print('%s queried!' % bruh)
             fs.write('%s|%s|%s|%s|%s\n' % (bruh,query.motd,query.software.version,query.software.plugins,query.players.names))
         except:
-            #print('Query failed on %s' % bruh)
+            print('Query failed on %s' % bruh)
             fs.write('%s|failed query\n' % bruh)
     fs.close()
 

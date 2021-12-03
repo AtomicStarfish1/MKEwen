@@ -1,6 +1,8 @@
 from mcstatus import MinecraftServer
 
 def reping(pipeline):
+    # Cheaks if minecraft server is still online
+    # Will append to each server file
     bruh = []
     ruh = []
     f = open('out.txt', 'r+')
