@@ -25,17 +25,17 @@ def pwn(id, pipeline):
 def rep():
     while True:
         BetterReping()
-        sleep(1)
+        sleep(100)
 
 def querer(pipeline):
     while True:
         que(pipeline)
-        sleep(1)
+        sleep(100)
 
 def namer(pipeline):
     while True:
         namey(pipeline)
-        sleep(1)
+        sleep(100)
     
 def BetterThreader(workers):
     pipeline = queue.Queue(maxsize=1000)
@@ -49,4 +49,4 @@ def BetterThreader(workers):
                 ii = str(i)+' '
             exicutor.submit(pwn, ii, pipeline); print(f'Starting Thread {i}: "pwn"')
     
-BetterThreader(4)
+BetterThreader(400)
