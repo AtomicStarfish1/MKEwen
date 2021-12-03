@@ -1,6 +1,6 @@
 from mcstatus import MinecraftServer
 
-def reping():
+def reping(pipeline):
     bruh = []
     ruh = []
     f = open('out.txt', 'r+')

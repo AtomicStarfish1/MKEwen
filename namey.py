@@ -1,4 +1,4 @@
-def namey():
+def namey(pipeline):
     bruh = []
     f = open('qout.txt', 'r+')
     lines = f.readlines()
