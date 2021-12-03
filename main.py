@@ -9,8 +9,7 @@ import queue
 
 def pwn(id, pipeline):
     #looks for minecraft servers
-    bob = True
-    while bob:
+    while True:
         ip = ipgen() + ':25565'
         server = MinecraftServer.lookup(ip)
         try:
@@ -20,7 +19,6 @@ def pwn(id, pipeline):
         except ConnectionRefusedError and OSError:
             pass
             print(f"Thread {id}: Server {ip} didn't respond :(")
-        bob = False
 
 def rep():
     while True:
