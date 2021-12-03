@@ -1,18 +1,18 @@
-from os import pipe
 from ipgen import *
 import concurrent.futures
 from mcstatus import MinecraftServer
-from threading import Thread
 from queryboi import que
-from repinger import reping
+from repinger import BetterReping
 from time import sleep
 from namey import namey
 import queue
 
 def pwn(id, pipeline):
     #looks for minecraft servers
-    while True:
+    bob = True
+    while bob:
         ip = ipgen() + ':25565'
+        ip = 'play.mineclub.com'
         server = MinecraftServer.lookup(ip)
         try:
             status = server.status()
@@ -21,10 +21,11 @@ def pwn(id, pipeline):
         except ConnectionRefusedError and OSError:
             pass
             print(f"Thread {id}: Server {ip} didn't respond :(")
+        bob = False
 
-def rep(pipeline):
+def rep():
     while True:
-        reping(pipeline)
+        BetterReping()
         sleep(1)
 
 def querer(pipeline):
@@ -40,7 +41,7 @@ def namer(pipeline):
 def BetterThreader(workers):
     pipeline = queue.Queue(maxsize=1000)
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as exicutor:
-        exicutor.submit(rep, pipeline); print('Starting "rep"')
+        exicutor.submit(rep); print('Starting "rep"')
         exicutor.submit(querer, pipeline); print('Starting "querer')
         exicutor.submit(namer, pipeline); print('Starting "namer"')
         for i in range(workers-3): # the negative 3 is to take into account the other threads
@@ -49,4 +50,4 @@ def BetterThreader(workers):
                 ii = str(i)+' '
             exicutor.submit(pwn, ii, pipeline); print(f'Starting Thread {i}: "pwn"')
     
-BetterThreader(400)
+BetterThreader(4)
