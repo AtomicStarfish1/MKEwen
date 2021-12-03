@@ -12,7 +12,6 @@ def pwn(id, pipeline):
     bob = True
     while bob:
         ip = ipgen() + ':25565'
-        ip = 'play.mineclub.com'
         server = MinecraftServer.lookup(ip)
         try:
             status = server.status()
