@@ -1,28 +1,32 @@
 from mcstatus import MinecraftServer
-
-def reping():
-    bruh = []
-    ruh = []
-    f = open('out.txt', 'r+')
-    lines = f.readlines()
-    f.close()
-    fs = open('rout.txt', 'w').close()
-    fs = open('rout.txt', 'a')
-    for line in lines:
-        bruh.append(line.split('|')[0])
-    [ruh.append(x) for x in bruh if x not in ruh]
-    for line in ruh:
-        bruh = line
-        #print(bruh)
-        server = MinecraftServer.lookup(bruh)
+import os
+import datetime
+import json
+    
+def BetterReping():
+    ips = os.listdir('ServerProfiles') # the names of the files are the ips, so we can use them to reping
+    print(ips)
+    for ip in ips:
+        ip = ip[:-5]
+        server = MinecraftServer.lookup(ip)
+        Time = datetime.datetime.now().strftime('%d.%m.%Y %H:%M:%S')
         try:
             status = server.status()
-            #print("%s has %s players and replied in %s ms" % (bruh,status.players.online,status.latency))
-            fs.write("%s|%s|%s\n" % (bruh,status.players.online,status.latency))
-        except ConnectionRefusedError and OSError:
-            #print("Server didn't respond :(")
-            fs.write("%s|DOWN\n" % (bruh))
-    fs.close()
+            PingLog = {"Time": Time,
+                       "Players Online": status.players.online,
+                       "Latency": status.latency, 
+                       "Status":'ONLINE'}
+        except:
+            PingLog = {"Time": Time,
+                       "Players Online": 0,
+                       "Latency": 0, 
+                       "Status":'DOWN'}
+            
+        with open('ServerProfiles/'+ip+'.json', 'r') as File:
+            ServerProfile = json.load(File)
+            ServerProfile['PingLog'].append(PingLog)
+            
+        with open('ServerProfiles/'+ip+'.json', 'w') as File:
+            json.dump(ServerProfile, File)
 
-if __name__ == "__main__":
-    reping()
+

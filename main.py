@@ -1,58 +1,50 @@
 from ipgen import *
-import socket
+import concurrent.futures
 from mcstatus import MinecraftServer
-from threading import Thread
 from queryboi import que
-from repinger import reping
+from repinger import BetterReping
 from time import sleep
 from namey import namey
+import queue
 
-def pwn():
+def pwn(id, pipeline):
+    #looks for minecraft servers
     while True:
-        gen = ipgen() + ':25565'
-        #print('Contacting ' + gen)
-        server = MinecraftServer.lookup(gen)
-        fs = open("out.txt", "a")
+        ip = ipgen() + ':25565'
+        server = MinecraftServer.lookup(ip)
         try:
             status = server.status()
-            print("%s has %s players and replied in %s ms" % (gen,status.players.online,status.latency))
-            fs.write("%s|%s|%s\n" % (gen,status.players.online,status.latency))
-            fs.close()
+            print("%s has %s players and replied in %s ms" % (ip,status.players.online,status.latency))
+            pipeline.put([ip,status.players.online,status.latency])
         except ConnectionRefusedError and OSError:
             pass
-            #print("Server didn't respond :(")
-    try:
-        fs.close()
-    except:
-        pass
+            print(f"Thread {id}: Server {ip} didn't respond :(")
 
 def rep():
     while True:
-        reping()
-        sleep(1200000)
+        BetterReping()
+        sleep(100)
 
-def querer():
+def querer(pipeline):
     while True:
-        que()
-        sleep(1200000)
+        que(pipeline)
+        sleep(100)
 
-def namer():
+def namer(pipeline):
     while True:
-        namey()
-        sleep(1200000)
-
-def throod():
-    boi = int(input("Give number of threads: "))
-    threads = []
-    for boi in range(boi):
-        threads = Thread(target=pwn)
-        threads.start()
-    repper = Thread(target=rep)
-    quererer = Thread(target=querer)
-    namerer = Thread(target=namer)
-    repper.start()
-    quererer.start()
-    namerer.start()
+        namey(pipeline)
+        sleep(100)
     
-
-throod()
+def BetterThreader(workers):
+    pipeline = queue.Queue(maxsize=1000)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as exicutor:
+        exicutor.submit(rep); print('Starting "rep"')
+        exicutor.submit(querer, pipeline); print('Starting "querer')
+        exicutor.submit(namer, pipeline); print('Starting "namer"')
+        for i in range(workers-3): # the negative 3 is to take into account the other threads
+            ii = i
+            if i < 10:
+                ii = str(i)+' '
+            exicutor.submit(pwn, ii, pipeline); print(f'Starting Thread {i}: "pwn"')
+    
+BetterThreader(400)

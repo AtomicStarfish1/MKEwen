@@ -1,4 +1,7 @@
-def namey():
+def namey(pipeline):
+    # Gets players online
+    # Will be added to server profils under
+    # known players
     bruh = []
     f = open('qout.txt', 'r+')
     lines = f.readlines()
